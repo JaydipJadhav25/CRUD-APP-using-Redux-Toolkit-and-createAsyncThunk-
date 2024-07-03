@@ -13,6 +13,10 @@ export const Card = () => {
  const[show , setShow ] = useState(false);
  console.log("show : " , show)
 
+const[rediobtn , setRediobtn] = useState("");
+console.log("redion data: " , rediobtn);
+
+
   const dispatch = useDispatch();
   //destrutcher a obj
   const {users , loading , error , searchData}= useSelector((state) => state.app)
@@ -44,7 +48,7 @@ export const Card = () => {
 
 
   return (
-    <div>
+    <div className='mx-auto'>
       {/* palying codn on user */}
 
        {/* case1 */}
@@ -54,11 +58,58 @@ export const Card = () => {
 
 
         <h1 className="w-50 mx-auto">All Date</h1>
+   
+<div className='mx-auto text-center p-1 mx-2'>
+
+<input className="form-check-input mx-2" type="radio" name="gender" value="all"
+checked={rediobtn === ""}
+onChange={(e) => setRediobtn(e.target.value)}
+
+/>All
+<input className="form-check-input mx-2" type="radio" name="gender" value="male"
+checked={rediobtn === "male"}
+onChange={(e) => setRediobtn(e.target.value)}
+/>Male
+<input className="form-check-input mx-2" type="radio" name="gender" value="female"
+checked={rediobtn === "female"}
+onChange={(e) => setRediobtn(e.target.value)}
+
+/>Female
+
+        
+</div>
+
+
 
         <div>
 
        { users && 
-       users.map((user) => <div key={user.id} className="card w-50 mx-auto m-3 bg-info-subtle text-info-emphasis" >
+             
+             //condn check
+
+             users.filter((ele) =>{
+              if(searchData.length === 0){
+                return ele;
+              }
+              else{
+                return ele.name.toLowerCase().includes(searchData.name.toLowerCase());
+              }
+             }).filter((ele) => {
+              if(rediobtn === "male"){
+                return ele.gender === rediobtn;
+              }
+              else if(rediobtn === "female"){
+                
+                return ele.gender === rediobtn;
+              }
+              else{
+                return ele;
+              }
+             })
+
+
+
+       .map((user) => <div key={user.id} className="card w-50 mx-auto m-3 bg-info-subtle text-info-emphasis" >
   <div className="card-body mx-auto bg-info-subtle text-info-emphasis text-center">
     <h5 className="card-title mx-auto">{user.name}</h5>
     <h6 className="card-subtitle mb-2 text-body-secondary">{user.email}</h6>
